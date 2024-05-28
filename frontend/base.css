@@ -1,0 +1,29 @@
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background-color: #F3F1F1; }
+::-webkit-scrollbar-thumb { background-color: #D9D9D9; }
+
+#darkness { opacity: 0; transition: 0.3s all; z-index: -1; }
+.electronics { opacity: 0; visibility: hidden; transition: 0.2s all; }
+body:has(#electronics:hover) { .electronics { visibility: visible; opacity: 1; } }
+body:has(.electronics:hover) { .electronics { visibility: visible; opacity: 1; } }
+body:has(#searchInput:focus) {
+    #darkness { opacity: 1; z-index: 5; }
+    .search input { border: 1px solid #ffffffcc !important; }
+    .search * { color: #ffffffcc !important; }
+}
+
+/* КОМПОНЕНТЫ */
+
+.buttonT1 {
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: 0.2s all; border-radius: 10px;
+    border: 1px solid #2D2D2D; background-color: #2D2D2D; color: #fff;
+    &:hover { border: 1px solid #3b3b3b; background-color: #3b3b3b; }
+}
+
+.buttonT2 {
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: 0.2s all; border-radius: 10px;
+    border: 1px solid #2D2D2D;
+    &:hover { border: 1px solid #646464; }
+}
