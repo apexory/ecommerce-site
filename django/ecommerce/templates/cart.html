@@ -1,0 +1,117 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel='stylesheet' type='text/css' media='screen' href='{% static 'css/base.css' %}'>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>shooa v2.</title>
+    <script>
+        tailwind.config = {
+            theme: {
+                screens: { sm: '480px', md: '768px', lg: '1024px', xl: '1440px' },
+                extend: { colors: { header: '#D9D9D9', card: '#F3F1F1', active: '#4E7FFF', item: '#E2E2E2' } }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .pad {
+                padding: 5px 5px;
+            }
+        }
+    </style>
+</head>
+<body class="font-['Montserrat'] bg-[#EDE9E9]">
+
+<div class="fixed top-0 left-0 bg-[#000000b3] w-screen h-screen" id="darkness"></div>
+
+{% include 'main/nav.html' %}
+
+{% if user.is_authenticated == False %}
+<div class="flex flex-col items-center gap-3 mt-10">
+    <svg class="text-[50px]" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0zM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 11a5 5 0 0 0-3.307 1.25a1 1 0 0 0 1.323 1.5A3 3 0 0 1 12 15a2.98 2.98 0 0 1 1.984.75a1 1 0 1 0 1.324-1.5A5 5 0 0 0 12 13M8.5 8a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m7 0a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3"/></g></svg>
+    <div class="text-center">
+        <p>Oops! You are not authenticated!</p>
+        <p>Please login to this site. <a class="text-active" href="/login">Click!</a></p>
+    </div>
+</div>
+{% else %}
+
+<div class="flex flex-col gap-3 justify-center mt-8 px-2 lg:flex-row">
+    <div class="bg-card p-5 rounded-3xl order-last lg:order-first">
+        <p class="text-2xl font-semibold">Your Shopping Cart</p>
+        <p class="text-base text-[#494848] font-normal">Let's see what's on the shopping list</p>
+
+        <div class="flex flex-col gap-3 mt-5">
+            {% if cart %}
+            {% for item in cart %}
+            <div class="flex flex-col justify-center py-3.5 px-4 bg-item rounded-3xl lg:flex-row lg:justify-between">
+                <div class="flex gap-7">
+                    <div class="flex gap-1">
+                        <img class="h-20 lg:h-28" src="{% static 'img/toppng 3.png' %}">
+                        <div class="flex flex-col justify-center">
+                            <p class="text-[#444444] font-normal text-xs lg:text-sm">{{ item.product.type }}</p>
+                            <a href="/product?id={{ item.product.id }}" class="font-medium text-sm lg:text-lg text-active">{{ item.product.title }}</a>
+                            <p class="font-medium text-sm lg:text-lg">${{ item.product.price }}.00</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center gap-3 lg:gap-[25px]">
+                        <div class="flex gap-1 *:h-7 *:w-7 *:lg:h-9 *:lg:w-9">
+                            <a href="/removeToCart?id={{ item.product.id }}&redirect=cart" class="buttonT2">-</a>
+                            <div class="buttonT1">{{ item.count }}</div>
+                            <a href="/addToCart?id={{ item.product.id }}&redirect=cart" class="buttonT2">+</a>
+                        </div>
+                        <a href="/removeToCart?id={{ item.product.id }}&redirect=cart&all=True" class="buttonT2 h-7 w-7 lg:h-9 lg:w-9">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M18 12.998H6a1 1 0 0 1 0-2h12a1 1 0 0 1 0 2"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="flex flex-col items-center gap-3 mt-10 px-5">
+                <svg class="text-[50px]" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0zM12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 11a5 5 0 0 0-3.307 1.25a1 1 0 0 0 1.323 1.5A3 3 0 0 1 12 15a2.98 2.98 0 0 1 1.984.75a1 1 0 1 0 1.324-1.5A5 5 0 0 0 12 13M8.5 8a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m7 0a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3"/></g></svg>
+                <div class="text-center">
+                    <p>Oops! Products is not found.</p>
+                    <p>Let's go to add to cart first product. <a class="text-active" href="/">Click!</a></p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="bg-card p-6 rounded-3xl order-first lg:order-last lg:w-[23%]">
+        <p class="text-2xl font-semibold">Order Summary</p>
+        <p class="text-base text-[#494848] font-normal">It's time to pay</p>
+
+        <div class="bg-[#E2E2E2] rounded-3xl p-5 font-normal mt-5 h-32">
+            <div class="flex justify-between px-3"><p>Products</p><p>${{ total }}.00</p></div>
+            <div class="flex justify-between px-3"><p>Shipping</p><p>$0</p></div>
+        </div>
+        <div class="bg-[#2D2D2D] rounded-3xl p-5 font-normal h-32 text-white mt-[-25px]">
+            <div class="flex flex-col">
+                <div class="flex justify-between px-3"><p>Total</p><p>${{ total }}.00</p></div>
+                {% if cart %}
+                <a class="text-center hover:bg-[#dcdcdc] transition-all cursor-pointer bg-white text-black py-2 px-12 rounded-xl mt-6">Checkout</a>
+                {% else %}
+                <a class="text-center transition-all bg-[#808080] text-black py-2 px-12 rounded-xl mt-6">Checkout</a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endif %}
+
+
+<script src="{% static 'js/sortMenu.js' %}"></script>
+
+</body>
+</html>

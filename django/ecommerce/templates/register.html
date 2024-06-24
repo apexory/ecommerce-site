@@ -1,0 +1,65 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel='stylesheet' type='text/css' media='screen' href='{% static 'css/base.css' %}'>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>shooa v2.</title>
+    <script>
+        tailwind.config = {
+            theme: {
+                screens: { sm: '480px', md: '768px', lg: '1024px', xl: '1440px' },
+                extend: { colors: { header: '#D9D9D9', card: '#F3F1F1', active: '#4E7FFF', item: '#E2E2E2' } }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .pad {
+                padding: 5px 5px;
+            }
+        }
+    </style>
+</head>
+<body class="font-['Montserrat'] bg-[#EDE9E9]">
+
+<div class="fixed top-0 left-0 bg-[#000000b3] w-screen h-screen" id="darkness"></div>
+
+{% include 'main/nav.html' %}
+
+<div class="flex justify-center mt-8">
+    <div class="bg-card p-6 rounded-3xl lg:w-[40%]">
+        <p class="text-2xl font-semibold">Register new Account</p>
+        <p class="text-base text-[#494848]">Hey, new user! Welcome to shooa.</p>
+
+        <form method="POST" class="flex flex-col mt-3 gap-5">
+            {% csrf_token %}
+            {% if error %}
+            <div class="flex justify-center bg-[#ff2b2b] rounded-2xl px-4 py-3 text-white">
+                {{ error }}
+            </div>
+            {% endif %}
+            {% for field in form %}
+            <div>
+                <p class="text-[#494848]">{{ field.label }}</p>
+                <input name="{{ field.name }}" placeholder='{{ field.help_text }}' class="focus:outline-none focus:border-[#6F6E6E] transition mt-1 rounded-2xl py-3 px-4 w-full bg-transparent border-[1px] border-[#B6B5B5] font-normal" required />
+            </div>
+            {% endfor %}
+            <div class="flex mt-3 gap-3">
+                <input type="submit" class="buttonT1 h-11 w-36" value="Register"></input>
+                <a href="/login" class="buttonT2 h-11 w-32">Exists User</a>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+
+<script src="{% static 'js/sortMenu.js' %}"></script>
+
+</body>
+</html>
